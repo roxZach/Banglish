@@ -1,7 +1,7 @@
 // Keeps the app's own files on the device so it opens instantly and works
 // offline (voice input still needs internet). Each load serves the cached copy
 // and refreshes it in the background, so updates show up on the next open.
-const CACHE = 'banglish-v2';
+const CACHE = 'banglish-v3';
 const FILES = [
   './', 'index.html', 'styles.css', 'manifest.webmanifest',
   'js/dictionary.js', 'js/english-words.js', 'js/transliterate.js', 'js/app.js',

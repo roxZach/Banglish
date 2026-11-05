@@ -200,6 +200,27 @@
       : "Couldn't reach the speech service. Use Google Chrome or Microsoft Edge (not Brave, Opera or an app's built-in browser), and check that a VPN or firewall isn't blocking Google.",
   };
 
+  // Work out why the mic was refused, so the message names the right setting.
+  async function micBlockedHelp() {
+    const ua = navigator.userAgent;
+    // Facebook, Messenger, Instagram etc. open links in their own browser, which can't use the mic
+    if (/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|; wv\)/.test(ua)) {
+      return 'This in-app browser can\'t use the mic. Tap ⋮ → "Open in Chrome", then try again.';
+    }
+    let state = '';
+    try { state = (await navigator.permissions.query({ name: 'microphone' })).state; } catch { /* unsupported */ }
+    const android = /Android/.test(ua);
+    if (state === 'denied') {
+      return android
+        ? 'The mic is blocked for this site. In Chrome: ⋮ → Settings → Site settings → Microphone → tap roxzach.github.io → Allow. Then reopen Banglish.'
+        : 'The mic is blocked for this site. Click the icon left of the address bar → Microphone → Allow, then reload.';
+    }
+    // the site is allowed (or never asked), so the phone itself is blocking Chrome
+    return android
+      ? 'Your phone is blocking Chrome\'s mic. Open Android Settings → Apps → Chrome → Permissions → Microphone → Allow, then reopen Banglish.'
+      : null;
+  }
+
   function startListening() {
     recognition = new SpeechRecognition();
     recognition.lang = lang;
@@ -217,10 +238,11 @@
       render();
     };
 
-    recognition.onerror = e => {
+    recognition.onerror = async e => {
       if (e.error === 'no-speech' || e.error === 'aborted') return;
       listening = false;
-      setStatus(SPEECH_ERRORS[e.error] || `Speech error: ${e.error}`, 'error');
+      const blocked = e.error === 'not-allowed' || e.error === 'service-not-allowed';
+      setStatus((blocked && await micBlockedHelp()) || SPEECH_ERRORS[e.error] || `Speech error: ${e.error}`, 'error');
       updateMicUi();
     };
 
