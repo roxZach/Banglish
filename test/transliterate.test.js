@@ -69,6 +69,13 @@ const cases = [
   ['হু ইজ দিস', 'who is this'],
   ['নেক্সট উইকে এক্সাম', 'next week e exam'],
   ['মেসেজটা সিন করছে', 'message ta seen korche'],
+  ['অ্যাসাইনমেন্টটা সাবমিটেড', 'assignment ta submitted'],
+  ['চেকড', 'checked'],
+  ['ফাইনালি কারেন্ট আসছে', 'finally current asche'],
+  ['মিডটার্মের সিলেবাস', 'midterm er syllabus'],
+  ['ইনবক্সে নক দিও', 'inbox e knock dio'],
+  ['কিল মারব', 'kil marbo'],
+  ['অনেক লাফ দিল', 'onek laf dilo'],
 
   // Bangla words that look like English must stay Bangla
   ['কোনো লাভ নাই', 'kono labh nai'],

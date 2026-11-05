@@ -35,7 +35,7 @@
     'কমল': 'komol', 'কোমল': 'komol', 'বাদল': 'badol', 'পটল': 'potol', 'ছাগল': 'chagol',
     'কাজল': 'kajol', 'সফল': 'sofol', 'বিফল': 'bifol', 'সরল': 'sorol', 'তরল': 'torol',
     'নকল': 'nokol', 'আমল': 'amol', 'মহল': 'mohol', 'তেল': 'tel', 'মিল': 'mil',
-    'ঝিল': 'jhil',
+    'ঝিল': 'jhil', 'কিল': 'kil',
 
     // casual / colloquial
     'ব্যাপার': 'bepar', 'ক্যামনে': 'kemne', 'ক্যান': 'keno', 'ঈদ': 'eid',

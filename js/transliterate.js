@@ -56,6 +56,8 @@
     ['টাও', 'tao'], ['টাই', 'tai'], ['টার', 'tar'], [YYA + SIGN_E, 'e'],
     ['টা', 'ta'], ['টি', 'ti'], ['কে', 'ke'], ['রা', 'ra'], ['তে', 'te'], [SIGN_E + 'র', 'er'],
     [SIGN_I + 'ং', 'ing', true], ['র', 'r'], [SIGN_E, 'e'], ['ই', 'i'], ['ও', 'o'], ['স', 's', true],
+    [SIGN_E + 'ড', 'ed', true], ['ড', 'ed', true],                       // সাবমিটেড, চেকড
+    ['লি', 'ly', true], [SIGN_I, 'ly', true],                            // সিরিয়াসলি, ফাইনালি (ফাইনাল + ি)
   ].sort((a, b) => a[0].length - b[0].length);  // longest stem first: উইকে → উইক + ে, not উই + কে
 
   function normalizeKeys(obj) {
@@ -326,6 +328,8 @@
     if (english) {
       if (suffix === 's') return stem + 's';                          // ফ্রেন্ডস → friends
       if (suffix === 'ing') return stem.replace(/e$/, '') + 'ing';    // চেকিং → checking
+      if (suffix === 'ed') return stem.replace(/e$/, '') + 'ed';      // চেকড → checked
+      if (suffix === 'ly') return stem + 'ly';                         // ফাইনালি → finally
       return stem + ' ' + suffix;                                     // meeting e, project ta
     }
     if (stem.endsWith('e') && suffix.startsWith('e')) return stem + suffix.slice(1);
@@ -347,6 +351,8 @@
       const stemLen = Array.from(stemWord).length;
       // short stems need a real ending: বসে is "bose" (sitting), not boss + e
       if (stemLen < 2 || (Array.from(suf).length === 1 && stemLen < 3)) continue;
+      // a bare ি only means "-ly" after ল (ফাইনাল + ি = finally)
+      if (suf === SIGN_I && !stemWord.endsWith('ল')) continue;
       const stem = !englishOnly && hasOwn(userDict, stemWord)
         ? { out: userDict[stemWord], source: 'user' }
         : lookupEnglish(stemWord);

@@ -17,11 +17,6 @@ The transcript comes from Bangla speech recognition, which writes any English th
 - Keep punctuation; । becomes a full stop.
 - Reply with the converted text only.`;
 
-export const MODELS = [
-  { id: 'claude-opus-5-5', label: 'Claude Opus 5.5 (best quality)' },
-  { id: 'claude-haiku-5-5', label: 'Claude Haiku 5.5 (fastest, cheapest)' },
-];
-
 let client = null;
 let clientKey = null;
 

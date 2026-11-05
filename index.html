@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Banglish</title>
   <meta name="description" content="Speak Bangla, mixed with English, and get it written in Banglish.">
-  <meta name="theme-color" content="#060d0a">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2310b981'/%3E%3Cpath d='M20 22h24a6 6 0 0 1 6 6v10a6 6 0 0 1-6 6H32l-9 7v-7h-3a6 6 0 0 1-6-6V28a6 6 0 0 1 6-6Z' fill='white'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0b1210">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Banglish">
   <link rel="stylesheet" href="styles.css">
   <script>
-    // set the theme before first paint to avoid a flash
     try {
       const t = localStorage.getItem('banglish.theme');
       document.documentElement.dataset.theme = t ? JSON.parse(t)
@@ -21,24 +21,17 @@
   </script>
 </head>
 <body>
-  <div class="aurora" aria-hidden="true">
-    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
-  </div>
-
-  <header class="nav reveal">
-    <a class="brand" href="./" aria-label="Banglish home">
-      <span class="logo" aria-hidden="true">
-        <svg viewBox="0 0 32 32"><path d="M8 8h16a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-7l-6 5v-5H8a5 5 0 0 1-5-5v-6a5 5 0 0 1 5-5Z" fill="currentColor"/><text x="16" y="19.5" text-anchor="middle" font-size="9" font-weight="800" fill="var(--logo-ink)" font-family="Plus Jakarta Sans, sans-serif">অ→a</text></svg>
-      </span>
-      <span class="wordmark">Banglish</span>
+  <header class="nav">
+    <a class="brand" href="./">
+      <img class="logo" src="icons/icon-192.png" alt="" width="30" height="30">
+      <span>Banglish</span>
     </a>
     <div class="nav-actions">
-      <button id="modeBadge" class="badge" type="button" title="Change conversion mode">
-        <span class="dot"></span><span id="modeText">Offline mode</span>
+      <button id="modeBadge" class="badge" type="button" title="Conversion mode">
+        <span class="dot"></span><span id="modeText">Offline</span>
       </button>
       <button id="themeBtn" class="icon-btn" type="button" aria-label="Switch theme">
-        <svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
-        <svg class="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
       </button>
       <button id="settingsBtn" class="icon-btn" type="button" aria-label="Open settings">
         <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
@@ -47,90 +40,51 @@
   </header>
 
   <main class="app">
-    <section class="hero">
-      <h1 class="headline reveal" style="--d:.05s"><span class="grad">Speak Bangla.</span> Get&nbsp;Banglish.</h1>
-      <p class="sub reveal" style="--d:.12s">
-        <span lang="bn">বাংলায় বলুন, ইংরেজি মিশিয়েও।</span>
-        We'll write it the way you text.
-      </p>
-
-      <div class="mic-stage reveal" id="micStage" style="--d:.2s">
-        <canvas id="viz" aria-hidden="true"></canvas>
-        <span class="ring r1" aria-hidden="true"></span>
-        <span class="ring r2" aria-hidden="true"></span>
-        <button id="micBtn" class="mic" type="button" aria-pressed="false" aria-label="Start listening">
-          <svg class="i-mic" viewBox="0 0 24 24"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 1 2 0 8 8 0 0 1-7 7.94V21a1 1 0 1 1-2 0v-1.56a8 8 0 0 1-7-7.94 1 1 0 1 1 2 0 6 6 0 0 0 12 0Z"/></svg>
-          <span class="i-stop"></span>
-        </button>
-      </div>
-
-      <div class="status-row reveal" style="--d:.28s">
-        <div id="status" class="status" role="status">Tap the mic and start talking</div>
-        <div class="hint-key">or press <kbd>Space</kbd></div>
-      </div>
-
-      <div class="accent-switch reveal" role="radiogroup" aria-label="Accent" style="--d:.34s">
-        <span class="seg-glider" aria-hidden="true"></span>
-        <button type="button" class="seg" role="radio" data-lang="bn-BD">Bangladesh</button>
-        <button type="button" class="seg" role="radio" data-lang="bn-IN">West Bengal</button>
-      </div>
-    </section>
-
     <section class="workspace">
-      <article class="card card-in reveal" style="--d:.42s">
+      <article class="card card-out">
         <header class="card-head">
-          <div>
-            <h2 lang="bn">বাংলা</h2>
-            <p class="card-sub">What the mic heard. Edit freely.</p>
-          </div>
-          <button id="clearBtn" class="btn ghost" type="button">
-            <svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>
-            Clear
-          </button>
-        </header>
-        <div class="input-wrap">
-          <textarea id="bangla" lang="bn" spellcheck="false" placeholder="এখানে বাংলায় লিখুন, অথবা মাইকে কথা বলুন…"></textarea>
-          <div id="interim" class="interim" lang="bn" aria-live="polite"></div>
-        </div>
-      </article>
-
-      <article class="card card-out reveal" style="--d:.5s">
-        <header class="card-head">
-          <div>
-            <h2>Banglish</h2>
-            <p class="card-sub">Tap any word to change its spelling.</p>
-          </div>
+          <h2>Banglish</h2>
           <div class="tools">
-            <button id="shareBtn" class="btn ghost" type="button" hidden>
-              <svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
-              Share
-            </button>
-            <button id="copyBtn" class="btn primary" type="button">
-              <svg class="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
-              <svg class="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
-              <span>Copy</span>
-            </button>
+            <button id="shareBtn" class="btn ghost" type="button" hidden>Share</button>
+            <button id="copyBtn" class="btn primary" type="button">Copy</button>
           </div>
         </header>
         <div id="output" class="output" aria-live="polite"></div>
-        <div id="examples" class="examples">
-          <span class="examples-label">Try one:</span>
-        </div>
+        <div id="examples" class="examples"><span class="muted">Try:</span></div>
         <footer class="legend">
-          <span class="key k-en">English</span>
+          <span class="key k-en"><b>English</b> words</span>
           <span class="key k-custom">Your spelling</span>
           <span class="key k-ai">AI</span>
+          <span class="muted">Tap a word to change its spelling.</span>
         </footer>
       </article>
-    </section>
 
-    <p class="foot reveal" style="--d:.6s">Voice input works in Chrome and Edge. Everything else runs in your browser.</p>
+      <article class="card card-in">
+        <header class="card-head">
+          <h2 lang="bn">বাংলা</h2>
+          <button id="clearBtn" class="btn ghost" type="button">Clear</button>
+        </header>
+        <textarea id="bangla" lang="bn" spellcheck="false" placeholder="এখানে বাংলায় লিখুন, অথবা মাইকে কথা বলুন…"></textarea>
+        <div id="interim" class="interim" lang="bn" aria-live="polite"></div>
+      </article>
+    </section>
   </main>
 
-  <button id="fab" class="fab" type="button" aria-label="Start listening">
-    <svg class="i-mic" viewBox="0 0 24 24"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 1 2 0 8 8 0 0 1-7 7.94V21a1 1 0 1 1-2 0v-1.56a8 8 0 0 1-7-7.94 1 1 0 1 1 2 0 6 6 0 0 0 12 0Z"/></svg>
-    <span class="i-stop"></span>
-  </button>
+  <div class="dock">
+    <div class="dock-inner">
+      <div class="dock-info">
+        <div id="status" class="status" role="status">Tap the mic and talk</div>
+        <div class="accent-switch" role="radiogroup" aria-label="Accent">
+          <button type="button" class="seg" role="radio" data-lang="bn-BD">Bangladesh</button>
+          <button type="button" class="seg" role="radio" data-lang="bn-IN">West Bengal</button>
+        </div>
+      </div>
+      <button id="micBtn" class="mic" type="button" aria-pressed="false" aria-label="Start listening">
+        <svg class="i-mic" viewBox="0 0 24 24"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 1 2 0 8 8 0 0 1-7 7.94V21a1 1 0 1 1-2 0v-1.56a8 8 0 0 1-7-7.94 1 1 0 1 1 2 0 6 6 0 0 0 12 0Z"/></svg>
+        <span class="i-stop"></span>
+      </button>
+    </div>
+  </div>
 
   <div id="drawer" class="drawer" hidden>
     <div class="drawer-scrim" data-close></div>
@@ -145,24 +99,27 @@
       <section class="setting-group">
         <h3>Spelling style</h3>
         <label class="switch-row"><span><b>ভ as v</b><small>valo, vai</small></span><input type="checkbox" id="optV" class="switch"></label>
-        <label class="switch-row"><span><b>ফ as ph</b><small>phul, phone</small></span><input type="checkbox" id="optPh" class="switch"></label>
+        <label class="switch-row"><span><b>ফ as ph</b><small>phul</small></span><input type="checkbox" id="optPh" class="switch"></label>
         <label class="switch-row"><span><b>স as sh</b><small>shob, basha</small></span><input type="checkbox" id="optSh" class="switch"></label>
       </section>
 
       <section class="setting-group">
         <h3>AI mode <span class="pill">optional</span></h3>
-        <p class="setting-note">Claude rewrites each sentence as natural Banglish and catches English words the built-in list doesn't know. You need an Anthropic API key, and each sentence is one paid API call.</p>
+        <p class="setting-note">Claude rewrites each sentence as natural Banglish and catches English words the built-in list doesn't know. Needs your own Anthropic API key; each sentence is one paid API call.</p>
         <label class="switch-row"><span><b>Use AI</b><small id="aiStatus">Add an API key to turn this on</small></span><input type="checkbox" id="aiEnabled" class="switch"></label>
         <label class="field">
           <span>API key</span>
           <span class="key-row">
             <input id="aiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
-            <button id="aiKeyToggle" class="btn ghost small" type="button">Show</button>
+            <button id="aiKeyToggle" class="btn ghost" type="button">Show</button>
           </span>
         </label>
         <label class="field">
           <span>Model</span>
-          <select id="aiModel"></select>
+          <select id="aiModel">
+            <option value="claude-opus-5-5">Claude Opus 5.5 (best quality)</option>
+            <option value="claude-haiku-5-5">Claude Haiku 5.5 (fastest, cheapest)</option>
+          </select>
         </label>
         <p class="setting-note small">Get a key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>. It's saved only in this browser and sent only to Anthropic.</p>
       </section>
@@ -179,21 +136,16 @@
     <div class="editor-src" id="editorSrc" lang="bn"></div>
     <input id="editorInput" type="text" autocomplete="off" spellcheck="false" aria-label="Your spelling">
     <div class="editor-actions">
-      <button id="editorReset" class="btn ghost small" type="button">Use default</button>
-      <button id="editorSave" class="btn primary small" type="button">Save</button>
+      <button id="editorReset" class="btn ghost" type="button">Use default</button>
+      <button id="editorSave" class="btn primary" type="button">Save</button>
     </div>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="js/dictionary.js"></script>
   <script src="js/english-words.js"></script>
   <script src="js/transliterate.js"></script>
   <script src="js/app.js"></script>
-  <script type="module">
-    import * as ai from './js/ai.js';
-    window.BanglishAI = ai;
-    window.dispatchEvent(new Event('banglish-ai-ready'));
-  </script>
 </body>
 </html>
