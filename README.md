@@ -5,7 +5,11 @@ Bangla in English letters, the way we text on Facebook and Messenger.
 
 > আই উইল কল ইউ লেটার, এখন অনেক বিজি → **i will call you later, ekhon onek busy**
 
-## Run it
+**Use it: https://roxzach.github.io/Banglish/**
+
+Every push to `main` updates the site automatically (GitHub Pages).
+
+## Run it locally
 
 ```bash
 python -m http.server 5500
