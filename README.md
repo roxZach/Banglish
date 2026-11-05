@@ -16,6 +16,16 @@ Open <http://localhost:5500> in **Google Chrome or Microsoft Edge**, tap the mic
 service, so it needs internet and doesn't work in Brave, Opera or Firefox.
 Typing or pasting Bangla works in any browser.
 
+## Install it like an app
+
+Once it's hosted on an https address:
+
+- **Android (Chrome):** open the link → ⋮ menu → **Add to Home screen** / **Install app**.
+- **PC (Chrome or Edge):** open the link → click the install icon at the right end of the address bar.
+- **iPhone (Safari):** Share → **Add to Home Screen**. Safari's built-in speech may not support Bangla; if the mic doesn't work, tap the Bangla box and use the keyboard's own mic button.
+
+The app's files are cached on the device, so it opens instantly. Voice input still needs internet.
+
 ## Features
 
 - **Live voice input** in Bangla (Bangladesh or West Bengal accent) with a voice visualizer
