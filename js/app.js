@@ -200,6 +200,19 @@
       : "Couldn't reach the speech service. Use Google Chrome or Microsoft Edge (not Brave, Opera or an app's built-in browser), and check that a VPN or firewall isn't blocking Google.",
   };
 
+  // Safari on iPhone uses Apple's dictation service: it needs Siri/Dictation
+  // on, may not work from a home-screen app, and may not offer Bangla at all.
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  function iosHelp(error) {
+    if (navigator.standalone) return 'Voice may not work in the home-screen app on iPhone. Open roxzach.github.io/Banglish in Safari and try the mic there.';
+    if (error === 'service-not-allowed') return 'Turn on Dictation: Settings → General → Keyboard → Enable Dictation (and turn on Siri). Then reload this page.';
+    if (error === 'not-allowed') return 'Safari blocked the mic. Tap "aA" in the address bar → Website Settings → Microphone → Allow. Also check Settings → Apps → Safari → Microphone.';
+    if (error === 'language-not-supported') return "Apple's dictation doesn't support Bangla on this iPhone yet. You can still type or paste Bangla in the box below.";
+    return null;
+  }
+
   // Work out why the mic was refused, so the message names the right setting.
   async function micBlockedHelp() {
     const ua = navigator.userAgent;
@@ -242,7 +255,8 @@
       if (e.error === 'no-speech' || e.error === 'aborted') return;
       listening = false;
       const blocked = e.error === 'not-allowed' || e.error === 'service-not-allowed';
-      setStatus((blocked && await micBlockedHelp()) || SPEECH_ERRORS[e.error] || `Speech error: ${e.error}`, 'error');
+      const help = isIOS ? iosHelp(e.error) : blocked ? await micBlockedHelp() : null;
+      setStatus(help || SPEECH_ERRORS[e.error] || `Speech error: ${e.error}`, 'error');
       updateMicUi();
     };
 
